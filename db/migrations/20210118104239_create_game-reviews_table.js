@@ -4,7 +4,7 @@ exports.up = function (knex) {
     gameReviewsTable.string('title').notNullable();
     gameReviewsTable.string('owner').references('users.username').notNullable();
     gameReviewsTable.string('designer').notNullable();
-    gameReviewsTable.text('body').notNullable();
+    gameReviewsTable.text('review_body').notNullable();
     gameReviewsTable
       .string('category')
       .references('categories.slug')

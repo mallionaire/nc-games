@@ -1,15 +1,15 @@
 {
-  "name": "FE-house-of-games",
+  "name": "fe-house-of-games",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "setup-dbs": "psql -f db/setup.sql",
-    "migrate-make":"knex migrate:make",
+    "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
-    "migrate-rollback": "knex migrate:rollback"
-
+    "migrate-rollback": "knex migrate:rollback",
+    "seed": "knex seed:run"
   },
   "repository": {
     "type": "git",
