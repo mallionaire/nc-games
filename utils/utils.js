@@ -8,17 +8,28 @@ exports.formatDates = (data) => {
   });
 };
 
-exports.formatComments = (comments) => {
-  return comments.map(({ created_by, ...restOfComment }) => {
-    const newComment = {
-      author: created_by,
-      ...restOfComment,
-    };
-    return newComment;
-  });
+exports.formatComments = (comments, lookupObj) => {
+  const formattedComments = this.formatDates(comments)
+  return formattedComments.map(
+    ({ created_by, belongs_to: key, ...restOfComment }) => {
+      const newComment = {
+        author: created_by,
+        game_id: lookupObj[key],
+        ...restOfComment,
+      };
+      return newComment;
+    }
+  );
 };
 
 
+exports.makeRefObj = (gameReviewList) => {
+  const refObj = {}
+  gameReviewList.forEach(review =>{
+    refObj[review.title] = review.game_review_id
+  })
+  return refObj
+}
     // game_review_id: 2,
     // title: 'Jenga',
     // owner: 'philippaclaire9',
@@ -41,10 +52,3 @@ exports.formatComments = (comments) => {
     // votes: 3,
     // created_at: 1610964545410,
 
-exports.makeRefObj = (gameReviewList) => {
-  const refObj = {}
-  gameReviewList.forEach(review =>{
-    refObj[review.title] = review.game_review_id
-  })
-  return refObj
-}
