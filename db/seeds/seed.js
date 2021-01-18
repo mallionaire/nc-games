@@ -4,7 +4,11 @@ const {
   gameReviewsData,
   commentsData,
 } = require("../data/test-data");
-const { formatDates } = require("../../utils/utils");
+const {
+  formatDates,
+  formatComments,
+  makeRefObj,
+} = require("../../utils/utils");
 
 exports.seed = function (knex) {
   return knex.migrate
@@ -21,9 +25,12 @@ exports.seed = function (knex) {
       return Promise.all([categoriesInsertions, usersInsertions]);
     })
     .then(() => {
-      const formattedGamesReviews = formatDates(gameReviewsData)
-      return knex('game-reviews').insert(formattedGamesReviews).returning('*')
-    }).then(gameRows => {
-      console.log(gameRows)
+      const formattedGamesReviews = formatDates(gameReviewsData);
+      return knex("game-reviews").insert(formattedGamesReviews).returning("*");
     })
+    .then((gameRows) => {
+      const gameIDRef = makeRefObj(gameRows);
+      const formattedComments = formatComments(commentsData, gameIDRef);
+      return knex("comments").insert(formattedComments);
+    });
 };
