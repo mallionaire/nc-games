@@ -1,6 +1,6 @@
 exports.up = function (knex) {
-  return knex.schema.createTable('game-reviews', (gameReviewsTable) => {
-    gameReviewsTable.increments('game_review_id').primary();
+  return knex.schema.createTable('reviews', (gameReviewsTable) => {
+    gameReviewsTable.increments('review_id').primary();
     gameReviewsTable.string('title').notNullable();
     gameReviewsTable.string('owner').references('users.username').notNullable();
     gameReviewsTable.string('designer').notNullable();
@@ -15,5 +15,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable('game-reviews');
+  return knex.schema.dropTable('reviews');
 };

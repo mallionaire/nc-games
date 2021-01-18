@@ -1,4 +1,4 @@
-exports.usersData = require('./users')
-exports.categoriesData = require("./categories")
-exports.gameReviewsData = require('./game-reviews')
-exports.commentsData = require("./comments")
+exports.usersData = require('./users');
+exports.categoriesData = require('./categories');
+exports.reviewsData = require('./reviews');
+exports.commentsData = require('./comments');

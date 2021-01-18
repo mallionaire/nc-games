@@ -1,70 +1,70 @@
-const { formatDates, formatComments, makeRefObj } = require("./utils");
+const { formatDates, formatComments, makeRefObj } = require('./utils');
 
-describe("formatDates", () => {
-  it("returns an array of objects when passed an array of Objects", () => {
+describe('formatDates', () => {
+  it('returns an array of objects when passed an array of Objects', () => {
     const input = [
       {
-        body: "I loved this game too!",
-        belongs_to: "Jenga",
-        created_by: "butter_bridge",
+        body: 'I loved this game too!',
+        belongs_to: 'Jenga',
+        created_by: 'butter_bridge',
         votes: 16,
         created_at: 1511354163389,
       },
     ];
     const output = [
       {
-        body: "I loved this game too!",
-        belongs_to: "Jenga",
-        created_by: "butter_bridge",
+        body: 'I loved this game too!',
+        belongs_to: 'Jenga',
+        created_by: 'butter_bridge',
         votes: 16,
         created_at: new Date(1511354163389),
       },
     ];
     expect(formatDates(input)).toEqual(output);
   });
-  it("returns multiple changed objects when passed an array of objects", () => {
+  it('returns multiple changed objects when passed an array of objects', () => {
     const input = [
       {
-        body: "I loved this game too!",
-        belongs_to: "Jenga",
-        created_by: "butter_bridge",
+        body: 'I loved this game too!',
+        belongs_to: 'Jenga',
+        created_by: 'butter_bridge',
         votes: 16,
         created_at: 1511354163389,
       },
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: 1610964545410,
       },
       {
         body: "I didn't know dogs could play games",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "butter_bridge",
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'butter_bridge',
         votes: 10,
         created_at: 1610964588110,
       },
     ];
     const output = [
       {
-        body: "I loved this game too!",
-        belongs_to: "Jenga",
-        created_by: "butter_bridge",
+        body: 'I loved this game too!',
+        belongs_to: 'Jenga',
+        created_by: 'butter_bridge',
         votes: 16,
         created_at: new Date(1511354163389),
       },
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: new Date(1610964545410),
       },
       {
         body: "I didn't know dogs could play games",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "butter_bridge",
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'butter_bridge',
         votes: 10,
         created_at: new Date(1610964588110),
       },
@@ -73,35 +73,35 @@ describe("formatDates", () => {
       expect(commentObj.created_at).toBeInstanceOf(Date);
     });
   });
-  it("does not mutate the original input array", () => {
+  it('does not mutate the original input array', () => {
     const input = [
       {
-        body: "I loved this game too!",
-        belongs_to: "Jenga",
-        created_by: "butter_bridge",
+        body: 'I loved this game too!',
+        belongs_to: 'Jenga',
+        created_by: 'butter_bridge',
         votes: 16,
         created_at: 1511354163389,
       },
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: 1610964545410,
       },
     ];
     const inputCopy = [
       {
-        body: "I loved this game too!",
-        belongs_to: "Jenga",
-        created_by: "butter_bridge",
+        body: 'I loved this game too!',
+        belongs_to: 'Jenga',
+        created_by: 'butter_bridge',
         votes: 16,
         created_at: 1511354163389,
       },
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: 1610964545410,
       },
@@ -111,127 +111,127 @@ describe("formatDates", () => {
   });
 });
 
-describe("makeRefObj", () => {
-  it("returns an empty object, when passed an empty array", () => {
+describe('makeRefObj', () => {
+  it('returns an empty object, when passed an empty array', () => {
     const input = [];
     const output = {};
     expect(makeRefObj(input)).toEqual(output);
   });
-  it("makes a reference object when passed an array with one object", () => {
+  it('makes a reference object when passed an array with one object', () => {
     const input = [
       {
-        game_review_id: 2,
-        title: "Jenga",
-        owner: "philippaclaire9",
-        designer: "Leslie Scott",
-        review_body: "Fiddly fun for all the family",
-        category: "Dexterity",
+        review_id: 2,
+        title: 'Jenga',
+        owner: 'philippaclaire9',
+        designer: 'Leslie Scott',
+        review_body: 'Fiddly fun for all the family',
+        category: 'Dexterity',
         votes: 5,
       },
     ];
     expect(makeRefObj(input)).toEqual({ Jenga: 2 });
   });
-  it("works with longer arrays of objects", () => {
+  it('works with longer arrays of objects', () => {
     const input = [
       {
-        game_review_id: 1,
-        title: "Agricola",
-        owner: "mallionaire",
-        designer: "Uwe Rosenberg",
-        review_body: "Farmyard fun!",
-        category: "Euro game",
-        created_at: "2021-01-18T10:00:20.514Z",
+        review_id: 1,
+        title: 'Agricola',
+        owner: 'mallionaire',
+        designer: 'Uwe Rosenberg',
+        review_body: 'Farmyard fun!',
+        category: 'Euro game',
+        created_at: '2021-01-18T10:00:20.514Z',
         votes: 1,
       },
       {
-        game_review_id: 2,
-        title: "Jenga",
-        owner: "philippaclaire9",
-        designer: "Leslie Scott",
-        review_body: "Fiddly fun for all the family",
-        category: "Dexterity",
-        created_at: "2021-01-18T10:01:41.251Z",
+        review_id: 2,
+        title: 'Jenga',
+        owner: 'philippaclaire9',
+        designer: 'Leslie Scott',
+        review_body: 'Fiddly fun for all the family',
+        category: 'Dexterity',
+        created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
       },
       {
-        game_review_id: 3,
-        title: "Ultimate Werewolf",
-        owner: "bainesface",
-        designer: "Akihisa Okui",
+        review_id: 3,
+        title: 'Ultimate Werewolf',
+        owner: 'bainesface',
+        designer: 'Akihisa Okui',
         review_body: "We couldn't find the werewolf!",
-        category: "Social deduction",
-        created_at: "2021-01-18T10:01:41.251Z",
+        category: 'Social deduction',
+        created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
       },
     ];
     expect(makeRefObj(input)).toEqual({
       Jenga: 2,
       Agricola: 1,
-      "Ultimate Werewolf": 3,
+      'Ultimate Werewolf': 3,
     });
   });
-  it("does not mutate the original array", () => {
+  it('does not mutate the original array', () => {
     const input = [
       {
-        game_review_id: 1,
-        title: "Agricola",
-        owner: "mallionaire",
-        designer: "Uwe Rosenberg",
-        review_body: "Farmyard fun!",
-        category: "Euro game",
-        created_at: "2021-01-18T10:00:20.514Z",
+        review_id: 1,
+        title: 'Agricola',
+        owner: 'mallionaire',
+        designer: 'Uwe Rosenberg',
+        review_body: 'Farmyard fun!',
+        category: 'Euro game',
+        created_at: '2021-01-18T10:00:20.514Z',
         votes: 1,
       },
       {
-        game_review_id: 2,
-        title: "Jenga",
-        owner: "philippaclaire9",
-        designer: "Leslie Scott",
-        review_body: "Fiddly fun for all the family",
-        category: "Dexterity",
-        created_at: "2021-01-18T10:01:41.251Z",
+        review_id: 2,
+        title: 'Jenga',
+        owner: 'philippaclaire9',
+        designer: 'Leslie Scott',
+        review_body: 'Fiddly fun for all the family',
+        category: 'Dexterity',
+        created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
       },
       {
-        game_review_id: 3,
-        title: "Ultimate Werewolf",
-        owner: "bainesface",
-        designer: "Akihisa Okui",
+        review_id: 3,
+        title: 'Ultimate Werewolf',
+        owner: 'bainesface',
+        designer: 'Akihisa Okui',
         review_body: "We couldn't find the werewolf!",
-        category: "Social deduction",
-        created_at: "2021-01-18T10:01:41.251Z",
+        category: 'Social deduction',
+        created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
       },
     ];
     const inputCopy = [
       {
-        game_review_id: 1,
-        title: "Agricola",
-        owner: "mallionaire",
-        designer: "Uwe Rosenberg",
-        review_body: "Farmyard fun!",
-        category: "Euro game",
-        created_at: "2021-01-18T10:00:20.514Z",
+        review_id: 1,
+        title: 'Agricola',
+        owner: 'mallionaire',
+        designer: 'Uwe Rosenberg',
+        review_body: 'Farmyard fun!',
+        category: 'Euro game',
+        created_at: '2021-01-18T10:00:20.514Z',
         votes: 1,
       },
       {
-        game_review_id: 2,
-        title: "Jenga",
-        owner: "philippaclaire9",
-        designer: "Leslie Scott",
-        review_body: "Fiddly fun for all the family",
-        category: "Dexterity",
-        created_at: "2021-01-18T10:01:41.251Z",
+        review_id: 2,
+        title: 'Jenga',
+        owner: 'philippaclaire9',
+        designer: 'Leslie Scott',
+        review_body: 'Fiddly fun for all the family',
+        category: 'Dexterity',
+        created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
       },
       {
-        game_review_id: 3,
-        title: "Ultimate Werewolf",
-        owner: "bainesface",
-        designer: "Akihisa Okui",
+        review_id: 3,
+        title: 'Ultimate Werewolf',
+        owner: 'bainesface',
+        designer: 'Akihisa Okui',
         review_body: "We couldn't find the werewolf!",
-        category: "Social deduction",
-        created_at: "2021-01-18T10:01:41.251Z",
+        category: 'Social deduction',
+        created_at: '2021-01-18T10:01:41.251Z',
         votes: 5,
       },
     ];
@@ -240,8 +240,8 @@ describe("makeRefObj", () => {
   });
 });
 
-describe("formatComments", () => {
-  it("returns an empty array when passed an empty array", () => {
+describe('formatComments', () => {
+  it('returns an empty array when passed an empty array', () => {
     const input = [];
     const output = formatComments(input, {});
     expect(output).not.toBe(input);
@@ -251,45 +251,45 @@ describe("formatComments", () => {
     const input = [
       {
         body: "I didn't know dogs could play games",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "butter_bridge",
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'butter_bridge',
         votes: 10,
         created_at: 1610964588110,
       },
     ];
     const output = formatComments(input, {});
-    expect(output[0].author).toEqual("butter_bridge");
+    expect(output[0].author).toEqual('butter_bridge');
     expect(output[0].created_by).toEqual(undefined);
   });
-  it("does not mutate the original array of objects", () => {
+  it('does not mutate the original array of objects', () => {
     const input = [
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: 1610964545410,
       },
       {
         body: "I didn't know dogs could play games",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "butter_bridge",
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'butter_bridge',
         votes: 10,
         created_at: 1610964588110,
       },
     ];
     const inputCopy = [
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: 1610964545410,
       },
       {
         body: "I didn't know dogs could play games",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "butter_bridge",
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'butter_bridge',
         votes: 10,
         created_at: 1610964588110,
       },
@@ -297,50 +297,50 @@ describe("formatComments", () => {
     formatComments(input, {});
     expect(input).toEqual(inputCopy);
   });
-  it("adds a game_id key, set to the correct value", () => {
+  it('adds a review_id key, set to the correct value', () => {
     const input = [
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: 1610964545410,
       },
     ];
-    const refObj = { "Ultimate Werewolf": 1 };
+    const refObj = { 'Ultimate Werewolf': 1 };
     const output = formatComments(input, refObj);
-    expect(output[0].game_id).toEqual(1);
+    expect(output[0].review_id).toEqual(1);
   });
-  it("fully formats an array of comments", () => {
+  it('fully formats an array of comments', () => {
     const input = [
       {
-        body: "My dog loved this game too!",
-        belongs_to: "Ultimate Werewolf",
-        created_by: "icellusedkars",
+        body: 'My dog loved this game too!',
+        belongs_to: 'Ultimate Werewolf',
+        created_by: 'icellusedkars',
         votes: 3,
         created_at: 1610964545410,
       },
       {
-        body: "I loved this game too!",
-        belongs_to: "Jenga",
-        created_by: "butter_bridge",
+        body: 'I loved this game too!',
+        belongs_to: 'Jenga',
+        created_by: 'butter_bridge',
         votes: 16,
         created_at: 1511354163389,
       },
     ];
-    const refObj = { "Ultimate Werewolf": 1 , Jenga: 2};
+    const refObj = { 'Ultimate Werewolf': 1, Jenga: 2 };
     const output = [
       {
-        game_id: 1,
-        body: "My dog loved this game too!",
-        author: "icellusedkars",
+        review_id: 1,
+        body: 'My dog loved this game too!',
+        author: 'icellusedkars',
         votes: 3,
         created_at: new Date(1610964545410),
       },
       {
-        game_id: 2,
-        body: "I loved this game too!",
-        author: "butter_bridge",
+        review_id: 2,
+        body: 'I loved this game too!',
+        author: 'butter_bridge',
         votes: 16,
         created_at: new Date(1511354163389),
       },
