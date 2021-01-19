@@ -5,5 +5,5 @@ exports.getUserByUsername = (req, res, next) => {
 
   fetchUserByUsername(username).then(([user]) => {
     res.send({ user });
-  });
+  }).catch(next);
 };

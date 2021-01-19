@@ -3,12 +3,12 @@ const {
   categoriesData,
   reviewsData,
   commentsData,
-} = require('../data/test-data');
+} = require("../data/test-data");
 const {
   formatDates,
   formatComments,
   makeRefObj,
-} = require('../../utils/utils');
+} = require("../../utils/utils");
 
 exports.seed = function (knex) {
   return knex.migrate
@@ -17,20 +17,21 @@ exports.seed = function (knex) {
       return knex.migrate.latest();
     })
     .then(() => {
-      const categoriesInsertions = knex('categories')
+      const categoriesInsertions = knex("categories")
         .insert(categoriesData)
-        .returning('*');
-      const usersInsertions = knex('users').insert(usersData).returning('*');
+        .returning("*");
+      const usersInsertions = knex("users").insert(usersData).returning("*");
 
       return Promise.all([categoriesInsertions, usersInsertions]);
     })
     .then(() => {
       const formattedGamesReviews = formatDates(reviewsData);
-      return knex('reviews').insert(formattedGamesReviews).returning('*');
+      return knex("reviews").insert(formattedGamesReviews).returning("*");
     })
     .then((gameRows) => {
       const gameIDRef = makeRefObj(gameRows);
       const formattedComments = formatComments(commentsData, gameIDRef);
-      return knex('comments').insert(formattedComments);
+      return knex("comments")
+        .insert(formattedComments)
     });
 };

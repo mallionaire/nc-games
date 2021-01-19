@@ -7,6 +7,8 @@ module.exports = [
     category: "Euro game",
     created_at: 1610964020514,
     votes: 1,
+    review_img_url:
+      "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
   },
   {
     title: "Jenga",
@@ -16,6 +18,8 @@ module.exports = [
     category: "Dexterity",
     created_at: 1610964101251,
     votes: 5,
+    review_img_url:
+      "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
   },
   {
     title: "Ultimate Werewolf",
@@ -25,5 +29,7 @@ module.exports = [
     category: "Social deduction",
     created_at: 1610964101251,
     votes: 5,
+    review_img_url:
+      "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
   },
 ];

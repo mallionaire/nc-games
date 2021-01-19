@@ -43,8 +43,8 @@ describe('/api', () => {
       return Promise.all(requests);
     });
   });
-  describe('/users', () => {
-    it('GET - status 200 - responds with an array of user objects', () => {
+  describe('/users/:username', () => {
+    it('GET - status 200 - responds with a user object', () => {
       return request(app)
         .get('/api/users/mallionaire')
         .expect(200)
@@ -56,6 +56,18 @@ describe('/api', () => {
               'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
           });
         });
+    });
+    it('ERROR - status 404 - responds with user not found for invalid username', () => {
+      return request(app).get("/api/users/invaliduser").expect(404).then(({body:{msg}}) => {
+        expect(msg).toBe('Sorry, User not found.')
+      })
+    });
+  });
+  describe('/reviews/:review_id', () => {
+    it('GET - status 200 - responds with a review object', () => {
+      return request(app).get('/api/reviews/2').expect(200).then(({body:{review}})=>{
+        expect(review.title).toBe('Jenga')
+      })
     });
   });
 });
