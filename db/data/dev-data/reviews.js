@@ -1,0 +1,38 @@
+module.exports = [
+  {
+    title: "Agricola, ",
+    designer: "Uwe Rosenberg",
+    owner: "tickle122",
+    review_body: "Farmyard fun!",
+    category: "Euro game",
+    created_at: 1610964020514,
+    votes: 1,
+  },
+  {
+    title: "Jenga",
+    designer: "Leslie Scott",
+    owner: "grumpy19",
+    review_body: "Fiddly fun for all the family",
+    category: "Dexterity",
+    created_at: 1610964101251,
+    votes: 5,
+  },
+  {
+    title: "One Night Ultimate Werewolf",
+    designer: "Akihisa Okui",
+    owner: "happyamy2016",
+    review_body: "We couldn't find the werewolf!",
+    category: "Social deduction",
+    created_at: 1610964101251,
+    votes: 5,
+  },
+  {
+    title: "A truly Quacking Game; Quacks of Quedlinburg",
+    designer: "Wolfgang Warsch",
+    owner: "happyamy2016",
+    review_body: "Ever wish you could try your hand at mixing potions? Quacks of Quedlinburg will have you mixing up a homebrew like no other. Each player buys different ingredients (chips) that are drawn at random to reach the most points, but watch out, you'd better not let your cauldrom explode.",
+    category: "push-your-luck",
+    created_at: 1610964101251,
+    votes: 10,
+  },
+];
