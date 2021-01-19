@@ -1,7 +1,10 @@
-const {getReviewById} = require('../controllers/reviews.controller')
+const {
+  getReviewById,
+  patchVotes,
+} = require("../controllers/reviews.controller");
 
-const reviewsRouter = require('express').Router()
+const reviewsRouter = require("express").Router();
 
-reviewsRouter.route('/:review_id').get(getReviewById)
+reviewsRouter.route("/:review_id").get(getReviewById).patch(patchVotes);
 
-module.exports = reviewsRouter
+module.exports = reviewsRouter;
