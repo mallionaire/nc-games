@@ -22,9 +22,11 @@ exports.handlePSQLErrors = (err, req, res, next) => {
     '22P02': { msg: 'Bad request', status: 400 },
     23502: { msg: 'Sorry, unprocessable entity', status: 422 },
     23503: { msg: 'Sorry, not found', status: 404 },
+    42703: { msg: 'Bad request', status: 400 },
   };
 
   if (err.code) {
+    //console.log(err.code);
     for (let key in psqlCodes) {
       //console.log(typeof key);
       if (err.code === key) {

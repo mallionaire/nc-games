@@ -1,12 +1,12 @@
-const connection = require("../db/connection");
+const connection = require('../db/connection');
 
 exports.fetchReviewById = (review_id) => {
-  return connection("reviews")
-    .select("reviews.*")
-    .where("reviews.review_id", review_id)
-    .leftJoin("comments", "reviews.review_id", "comments.review_id")
-    .count("comment_id AS comment_count")
-    .groupBy("reviews.review_id")
+  return connection('reviews')
+    .select('reviews.*')
+    .where('reviews.review_id', review_id)
+    .leftJoin('comments', 'reviews.review_id', 'comments.review_id')
+    .count('comment_id AS comment_count')
+    .groupBy('reviews.review_id')
     .then((review) => {
       if (!review.length) {
         return Promise.reject({
@@ -18,20 +18,34 @@ exports.fetchReviewById = (review_id) => {
 };
 
 exports.updateVotes = (review_id, votes) => {
-  return connection("reviews")
-    .where("review_id", review_id)
-    .increment("votes", votes || 0)
-    .returning("*");
+  return connection('reviews')
+    .where('review_id', review_id)
+    .increment('votes', votes || 0)
+    .returning('*');
 };
 
-
 exports.checkReviewExists = (review_id) => {
-  return connection('reviews').where("review_id", review_id).then(review => {
-    if(!review.length) {
-      return Promise.reject({
-        status: 404, 
-        msg: "Sorry, review not found"
-      })
-    }
-  })
-}
+  return connection('reviews')
+    .where('review_id', review_id)
+    .then((review) => {
+      if (!review.length) {
+        return Promise.reject({
+          status: 404,
+          msg: 'Sorry, review not found',
+        });
+      }
+    });
+};
+
+exports.fetchAllReviews = (column, order, owner, category) => {
+  return connection('reviews')
+    .select('reviews.*')
+    .leftJoin('comments', 'reviews.review_id', 'comments.review_id')
+    .count('comment_id AS comment_count')
+    .groupBy('reviews.review_id')
+    .orderBy(column || 'created_at', order || 'desc')
+    .modify((query) => {
+      if (owner) query.where('reviews.owner', owner);
+      if (category) query.where('reviews.category', category);
+    });
+};
