@@ -1,12 +1,13 @@
-const { request } = require('express');
-const e = require('express');
+const { request } = require("express");
+const e = require("express");
 const {
   fetchReviewById,
   updateVotes,
   fetchAllReviews,
-} = require('../models/reviews.model');
-const { fetchUserByUsername } = require('../models/users.model');
-const { checkCategoryExists } = require('../models/categories.model');
+  addReview,
+} = require("../models/reviews.model");
+const { fetchUserByUsername } = require("../models/users.model");
+const { checkCategoryExists } = require("../models/categories.model");
 
 exports.getReviewById = (req, res, next) => {
   const { review_id } = req.params;
@@ -50,6 +51,15 @@ exports.getAllReviews = (req, res, next) => {
   Promise.all([allReviews, doesUserExist, doesCategoryExist])
     .then(([reviews]) => {
       res.status(200).send({ reviews });
+    })
+    .catch(next);
+};
+
+exports.postReview = (req, res, next) => {
+  const review = req.body;
+  addReview(review)
+    .then(([review]) => {
+      res.status(201).send({ review });
     })
     .catch(next);
 };

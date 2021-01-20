@@ -17,7 +17,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handlePSQLErrors = (err, req, res, next) => {
-  //console.log(err);
+  console.log(err.code);
   const psqlCodes = {
     '22P02': { msg: 'Bad request', status: 400 },
     23502: { msg: 'Sorry, unprocessable entity', status: 422 },

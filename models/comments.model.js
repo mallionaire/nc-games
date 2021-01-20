@@ -1,16 +1,16 @@
-const connection = require('../db/connection');
-const { checkReviewExists } = require('./reviews.model');
+const connection = require("../db/connection");
+const { checkReviewExists } = require("./reviews.model");
 
 exports.addComment = (review_id, { body, username }) => {
-  return connection('comments')
+  return connection("comments")
     .insert({ body, author: username, review_id })
-    .returning('*');
+    .returning("*");
 };
 
-exports.fetchComments = (review_id, sort_by = 'created_at', order = 'desc') => {
-  return connection('comments')
-    .select('*')
-    .where('review_id', review_id)
+exports.fetchComments = (review_id, sort_by = "created_at", order = "desc") => {
+  return connection("comments")
+    .select("*")
+    .where("review_id", review_id)
     .orderBy(sort_by, order);
   // .then((comments) => {
   //   if (!comments.length) {
@@ -20,4 +20,11 @@ exports.fetchComments = (review_id, sort_by = 'created_at', order = 'desc') => {
   //     return [comments];
   //   }
   // });
+};
+
+exports.updateCommentVotes = (comment_id, votes) => {
+  return connection("comments")
+    .where("comment_id", comment_id)
+    .increment("votes", votes || 0)
+    .returning("*");
 };

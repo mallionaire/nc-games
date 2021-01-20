@@ -1,6 +1,10 @@
-const connection = require('../db/connection');
-const { addComment, fetchComments } = require('../models/comments.model');
-const { checkReviewExists } = require('../models/reviews.model');
+const connection = require("../db/connection");
+const {
+  addComment,
+  fetchComments,
+  updateCommentVotes,
+} = require("../models/comments.model");
+const { checkReviewExists } = require("../models/reviews.model");
 
 exports.postComment = (req, res, next) => {
   const { review_id } = req.params;
@@ -30,4 +34,12 @@ exports.getCommentsByReviewId = (req, res, next) => {
       res.status(200).send({ comments });
     })
     .catch(next);
+};
+
+exports.patchComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+  updateCommentVotes(comment_id, inc_votes).then(([comment]) => {
+    res.status(200).send({ comment });
+  });
 };

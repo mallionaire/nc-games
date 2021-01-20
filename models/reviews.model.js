@@ -49,3 +49,7 @@ exports.fetchAllReviews = (column, order, owner, category) => {
       if (category) query.where('reviews.category', category);
     });
 };
+
+exports.addReview = (review) => {
+  return connection('reviews').insert(review).returning('*')
+}
