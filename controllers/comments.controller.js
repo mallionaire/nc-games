@@ -1,5 +1,6 @@
 const connection = require('../db/connection');
 const { addComment, fetchComments } = require('../models/comments.model');
+const { checkReviewExists } = require('../models/reviews.model')
 
 exports.postComment = (req, res, next) => {
   const { review_id } = req.params;
@@ -16,7 +17,13 @@ exports.getCommentsByReviewId = (req, res, next) => {
   const { review_id } = req.params;
   const { sort_by, order } = req.query;
 
-  fetchComments(review_id, sort_by, order).then((comments) => {
+  const reviewExists = checkReviewExists(review_id)
+  const allComments = fetchComments(review_id, sort_by, order);
+
+  Promise.all([reviewExists, allComments])
+  .then(([reviewDoesExist, comments]) => {
     res.status(200).send({ comments });
-  });
+  }).catch(next)
 };
+
+
