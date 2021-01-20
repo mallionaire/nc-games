@@ -10,7 +10,7 @@ module.exports = [
     body: 'My dog loved this game too!',
     belongs_to: 'Ultimate Werewolf',
     created_by: 'mallionaire',
-    votes: 3,
+    votes: 13,
     created_at: 1610964545410,
   },
   {
