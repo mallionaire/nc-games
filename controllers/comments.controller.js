@@ -1,12 +1,11 @@
-const connection = require("../db/connection");
+const connection = require('../db/connection');
 const {
   addComment,
   fetchComments,
   updateCommentVotes,
-} = require("../models/comments.model");
-const {
-  fetchReviewById,
-} = require("../models/reviews.model");
+  removeComment,
+} = require('../models/comments.model');
+const { fetchReviewById } = require('../models/reviews.model');
 
 exports.postComment = (req, res, next) => {
   const { review_id } = req.params;
@@ -42,9 +41,23 @@ exports.patchComment = (req, res, next) => {
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
 
- updateCommentVotes(comment_id, inc_votes)
-  .then(([comment]) => {
-    console.log(comment)
-    res.status(200).send({ comment });
-  }).catch(next)
+  updateCommentVotes(comment_id, inc_votes)
+    .then(([comment]) => {
+      res.status(200).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+
+  removeComment(comment_id)
+    .then((result) => {
+      if (result > 0) {
+        res.status(204).send();
+      } else {
+        return Promise.reject({ status: 404, msg: 'Could not delete comment' });
+      }
+    })
+    .catch(next);
 };
