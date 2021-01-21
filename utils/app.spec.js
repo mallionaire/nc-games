@@ -82,7 +82,7 @@ describe("/api", () => {
           .expect(404)
           .then(({ body: { msg } }) => {
             expect(msg).toBe(
-              "Sorry, could not find the article you're looking for"
+              "Sorry, could not find the review you're looking for"
             );
           });
       });
@@ -110,6 +110,15 @@ describe("/api", () => {
           .expect(400)
           .then(({ body: { msg } }) => {
             expect(msg).toBe("Bad request");
+          });
+      });
+      it("ERROR - status 404 - responds with not found for an invalid review", () => {
+        return request(app)
+          .patch("/api/reviews/3000")
+          .send({ inc_votes: 1 })
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Sorry, not found");
           });
       });
       it("ERROR - status 400 - responds with bad request for invalid inc_votes type", () => {
@@ -239,7 +248,9 @@ describe("/api", () => {
           .get("/api/reviews/1000/comments")
           .expect(404)
           .then(({ body: { msg } }) => {
-            expect(msg).toBe("Sorry, review not found");
+            expect(msg).toBe(
+              "Sorry, could not find the review you're looking for"
+            );
           });
       });
       it("ERROR - status 400 - returns bad request if sort_by column does not exist", () => {
@@ -430,7 +441,7 @@ describe("/api", () => {
         });
       });
     });
-    describe.only("/comments/:comment_id", () => {
+    describe("/comments/:comment_id", () => {
       it("PATCH - status 200 - responds with an updated vote count on a comment", () => {
         return request(app)
           .patch("/api/comments/3")
@@ -438,6 +449,51 @@ describe("/api", () => {
           .expect(200)
           .then(({ body: { comment } }) => {
             expect(comment.votes).toBe(11);
+          });
+      });
+      it("PATCH - status 200 - responds with an updated vote count on a comment, works with negative values", () => {
+        return request(app)
+          .patch("/api/comments/3")
+          .send({ inc_votes: -1 })
+          .expect(200)
+          .then(({ body: { comment } }) => {
+            expect(comment.votes).toBe(9);
+          });
+      });
+      it("PATCH - status 200 - does not update the vote count on a comment when no inc_votes is attached to the body", () => {
+        return request(app)
+          .patch("/api/comments/3")
+          .send({})
+          .expect(200)
+          .then(({ body: { comment } }) => {
+            expect(comment.votes).toBe(10);
+          });
+      });
+      it("ERROR - status 404 - responds with not found for a non-existent comment ", () => {
+        return request(app)
+          .patch("/api/comments/1000")
+          .send({ inc_votes: 1 })
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Sorry, not found");
+          });
+      });
+      it("ERROR - status 404 - responds with not found for a non-existent comment type", () => {
+        return request(app)
+          .patch("/api/comments/invalid-type")
+          .send({ inc_votes: 1 })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad request");
+          });
+      });
+      it("ERROR - status 400 - responds with bad request if inc_votes is NaN", () => {
+        return request(app)
+          .patch("/api/comments/2")
+          .send({ inc_votes: "porridge" })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad request");
           });
       });
     });

@@ -11,7 +11,7 @@ exports.fetchReviewById = (review_id) => {
       if (!review.length) {
         return Promise.reject({
           status: 404,
-          msg: "Sorry, could not find the article you're looking for",
+          msg: "Sorry, could not find the review you're looking for",
         });
       } else return review;
     });
@@ -21,21 +21,27 @@ exports.updateVotes = (review_id, votes) => {
   return connection('reviews')
     .where('review_id', review_id)
     .increment('votes', votes || 0)
-    .returning('*');
+    .returning('*').then(review => {
+      if(!review.length) {
+        return Promise.reject({status: 404, msg: "Sorry, not found"})
+      } else {
+        return review 
+      }
+    })
 };
 
-exports.checkReviewExists = (review_id) => {
-  return connection('reviews')
-    .where('review_id', review_id)
-    .then((review) => {
-      if (!review.length) {
-        return Promise.reject({
-          status: 404,
-          msg: 'Sorry, review not found',
-        });
-      }
-    });
-};
+// exports.checkReviewExists = (review_id) => {
+//   return connection('reviews')
+//     .where('review_id', review_id)
+//     .then((review) => {
+//       if (!review.length) {
+//         return Promise.reject({
+//           status: 404,
+//           msg: 'Sorry, review not found',
+//         });
+//       }
+//     });
+// };
 
 exports.fetchAllReviews = (column, order, owner, category) => {
   return connection('reviews')

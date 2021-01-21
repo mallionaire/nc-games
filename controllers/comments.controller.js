@@ -4,7 +4,9 @@ const {
   fetchComments,
   updateCommentVotes,
 } = require("../models/comments.model");
-const { checkReviewExists } = require("../models/reviews.model");
+const {
+  fetchReviewById,
+} = require("../models/reviews.model");
 
 exports.postComment = (req, res, next) => {
   const { review_id } = req.params;
@@ -21,7 +23,7 @@ exports.getCommentsByReviewId = (req, res, next) => {
   const { review_id } = req.params;
   const { sort_by, order } = req.query;
 
-  const reviewExists = checkReviewExists(review_id);
+  const reviewExists = fetchReviewById(review_id);
   const allComments = fetchComments(review_id, sort_by, order);
   //   fetchComments(review_id, sort_by, order)
   //     .then(([comments]) => {
@@ -39,7 +41,10 @@ exports.getCommentsByReviewId = (req, res, next) => {
 exports.patchComment = (req, res, next) => {
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
-  updateCommentVotes(comment_id, inc_votes).then(([comment]) => {
+
+ updateCommentVotes(comment_id, inc_votes)
+  .then(([comment]) => {
+    console.log(comment)
     res.status(200).send({ comment });
-  });
+  }).catch(next)
 };
