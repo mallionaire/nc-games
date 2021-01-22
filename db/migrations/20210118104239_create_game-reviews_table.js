@@ -5,8 +5,11 @@ exports.up = function (knex) {
     gameReviewsTable.string('owner').references('users.username').notNullable();
     gameReviewsTable.string('designer').notNullable();
     gameReviewsTable.text('review_body').notNullable();
-    gameReviewsTable.text('review_img_url').defaultTo(
-      'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png')
+    gameReviewsTable
+      .text("review_img_url")
+      .defaultTo(
+        "https://images.pexels.com/photos/792051/pexels-photo-792051.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+      );
     gameReviewsTable
       .string('category')
       .references('categories.slug')
