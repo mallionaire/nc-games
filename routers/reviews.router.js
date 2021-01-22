@@ -8,6 +8,7 @@ const {
   postComment,
   getCommentsByReviewId,
 } = require('../controllers/comments.controller');
+const { handles405s } = require('../errors/errors');
 
 const reviewsRouter = require('express').Router();
 
