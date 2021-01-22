@@ -29,4 +29,9 @@ module.exports = [
     description:
       "Games where players construct their own deck as a main element of the gameplay",
   },
+  {
+    slug: "engine-building",
+    description:
+      "Games where players construct unique points-gaining engines main element of the gameplay",
+  },
 ];

@@ -3,7 +3,7 @@ const {
   categoriesData,
   reviewsData,
   commentsData,
-} = require("../data/test-data");
+} = require("../data");
 const {
   formatDates,
   formatComments,
