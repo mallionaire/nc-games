@@ -18,3 +18,7 @@ exports.checkCategoryExists = (category) => {
       }
     });
 };
+
+exports.addCategory = (newCategory) => {
+  return connection('categories').insert(newCategory).returning('*');
+};

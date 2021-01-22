@@ -45,21 +45,48 @@ describe('/api', () => {
       });
     });
     describe('POST', () => {
-      // it('POST - status 201 - returns new posted category', () => {
-      //   return request(app)
-      //     .post('/api/categories')
-      //     .send({
-      //       slug: 'table-top-games',
-      //       description: 'Games played on a table',
-      //     })
-      //     .expect(201)
-      //     .then(({ body: { category } }) => {
-      //       expect(category).toEqual({
-      //         slug: 'table-top-games',
-      //         description: 'Games played on a table',
-      //       });
-      //     });
-      // });
+      it('POST - status 201 - returns new posted category', () => {
+        return request(app)
+          .post('/api/categories')
+          .send({
+            slug: 'table-top-games',
+            description: 'Games played on a table',
+          })
+          .expect(201)
+          .then(({ body: { category } }) => {
+            expect(category).toEqual({
+              slug: 'table-top-games',
+              description: 'Games played on a table',
+            });
+          });
+      });
+      it('ERROR - status 422 - returns unprocessable entity when passed empty req body', () => {
+        return request(app)
+          .post('/api/categories')
+          .send({})
+          .expect(422)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('Sorry, unprocessable entity');
+          });
+      });
+      it('ERROR - status 422 - returns unprocessable entity when passed incomplete req body', () => {
+        return request(app)
+          .post('/api/categories')
+          .send({ slug: 'table-top' })
+          .expect(422)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('Sorry, unprocessable entity');
+          });
+      });
+      it('ERROR - status 400 - returns bad request when passed slug that already exists in database', () => {
+        return request(app)
+          .post('/api/categories')
+          .send({ slug: 'dexterity', description: 'trying again' })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('Bad request - that already exists');
+          });
+      });
     });
   });
   describe('/users/:username', () => {
