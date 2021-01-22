@@ -1,5 +1,3 @@
-const { request } = require("express");
-const e = require("express");
 const {
   fetchReviewById,
   updateVotes,
@@ -21,7 +19,7 @@ exports.getReviewById = (req, res, next) => {
 exports.patchVotes = (req, res, next) => {
   const { review_id } = req.params;
   const { inc_votes } = req.body;
-  // console.log(review_id, inc_votes)
+
   updateVotes(review_id, inc_votes)
     .then(([review]) => {
       res.status(200).send({ review });
@@ -34,13 +32,6 @@ exports.getAllReviews = (req, res, next) => {
 
   const allReviews = fetchAllReviews(sort_by, order, owner, category);
 
-  // let doesUserExist;
-
-  // if (owner) {
-  //   doesUserExist = fetchUserByUsername(owner);
-  // } else {
-  //   doesUserExist = Promise.resolve();
-  // }
 
   const doesUserExist = owner ? fetchUserByUsername(owner) : Promise.resolve();
 

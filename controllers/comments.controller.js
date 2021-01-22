@@ -1,4 +1,3 @@
-const connection = require('../db/connection');
 const {
   addComment,
   fetchComments,
@@ -24,14 +23,9 @@ exports.getCommentsByReviewId = (req, res, next) => {
 
   const reviewExists = fetchReviewById(review_id);
   const allComments = fetchComments(review_id, sort_by, order);
-  //   fetchComments(review_id, sort_by, order)
-  //     .then(([comments]) => {
-  //       res.status(200).send({ comments });
-  //     })
-  //     .catch(next);
-  Promise.all([reviewExists, allComments])
-    .then(([reviewDoesExist, comments]) => {
-      //console.log(comments, sort_by);
+
+  Promise.all([allComments, reviewExists])
+    .then(([comments]) => {
       res.status(200).send({ comments });
     })
     .catch(next);
