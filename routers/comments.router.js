@@ -5,6 +5,10 @@ const {
 
 const commentsRouter = require('express').Router();
 
-commentsRouter.route('/:comment_id').patch(patchComment).delete(deleteComment);
+commentsRouter
+  .route('/:comment_id')
+  .patch(patchComment)
+  .delete(deleteComment)
+  .all(handles405s);
 
 module.exports = commentsRouter;

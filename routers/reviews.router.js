@@ -3,23 +3,25 @@ const {
   patchVotes,
   getAllReviews,
   postReview,
-} = require("../controllers/reviews.controller");
+} = require('../controllers/reviews.controller');
 const {
   postComment,
   getCommentsByReviewId,
-} = require("../controllers/comments.controller");
+} = require('../controllers/comments.controller');
 
-const reviewsRouter = require("express").Router();
+const reviewsRouter = require('express').Router();
 
-reviewsRouter.route("/:review_id")
+reviewsRouter
+  .route('/:review_id')
   .get(getReviewById)
-  .patch(patchVotes);
-reviewsRouter.route("/:review_id/comments")
+  .patch(patchVotes)
+  .all(handles405s);
+reviewsRouter
+  .route('/:review_id/comments')
   .post(postComment)
-  .get(getCommentsByReviewId);
+  .get(getCommentsByReviewId)
+  .all(handles405s);
 
-reviewsRouter.route("/")
-  .get(getAllReviews)
-  .post(postReview);
+reviewsRouter.route('/').get(getAllReviews).post(postReview).all(handles405s);
 
 module.exports = reviewsRouter;
