@@ -323,8 +323,8 @@ describe('/api', () => {
             .get('/api/reviews')
             .expect(200)
             .then(({ body: { reviews } }) => {
-              expect(reviews.length).toBe(3);
-              expect(reviews[0].comment_count).toBe('3');
+              expect(reviews.length).toBe(10);
+              expect(reviews[7].comment_count).toBe('3');
             });
         });
         it('GET - status 200 - returns array of reviews sorted by date in descending order', () => {
@@ -414,6 +414,44 @@ describe('/api', () => {
             });
         });
       });
+      describe('GET pagination', () => {
+        it('will return first 10 reviews, starting at page 1 by default ', () => {
+          return request(app)
+            .get('/api/reviews')
+            .expect(200)
+            .then(({ body: { reviews } }) => {
+              expect(reviews.length).toBe(10);
+            });
+        });
+        it('will return second page of reviews when passed query p=2', () => {
+          return request(app)
+            .get('/api/reviews?p=2')
+            .expect(200)
+            .then(({ body: { reviews } }) => {
+              expect(reviews.length).toBe(3);
+            });
+        });
+        it('will return first 5 reviews when passed limit=5 query', () => {
+          return request(app)
+            .get('/api/reviews?limit=5')
+            .expect(200)
+            .then(({ body: { reviews } }) => {
+              expect(reviews.length).toBe(5);
+
+              expect(reviews[0].review_id).toBe(7);
+            });
+        });
+        it('will return second 5 reviews when passed limit=5&p=2 query with a total_count key', () => {
+          return request(app)
+            .get('/api/reviews?limit=5&p=2')
+            .expect(200)
+            .then(({ body: { reviews, total_count } }) => {
+              expect(reviews.length).toBe(5);
+              expect(reviews[0].review_id).toBe(9);
+              expect(total_count).toBe(13);
+            });
+        });
+      });
       describe('POST', () => {
         it('POST - status 200 - posts a new review', () => {
           return request(app)
@@ -427,7 +465,7 @@ describe('/api', () => {
             })
             .expect(201)
             .then(({ body: { review } }) => {
-              expect(review.review_id).toBe(4);
+              expect(review.review_id).toBe(14);
             });
         });
         it('ERROR - status 422 - responds with unprocessable entity if review information is missing from the request', () => {
