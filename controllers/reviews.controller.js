@@ -48,8 +48,6 @@ exports.getAllReviews = (req, res, next) => {
 
   Promise.all([allReviews, doesUserExist, doesCategoryExist])
     .then(([[reviewCount, reviews]]) => {
-      //console.log(first);
-      //console.log(results[0]);
       res.status(200).send({ reviews, total_count: reviewCount });
     })
     .catch(next);

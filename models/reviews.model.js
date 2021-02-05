@@ -64,7 +64,6 @@ exports.fetchAllReviews = async (
     .limit(limit)
     .offset(offset);
 
-  //console.log(paginatedReviews);
   return [allReviews.length, paginatedReviews];
 };
 
