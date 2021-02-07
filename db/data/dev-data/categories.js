@@ -1,8 +1,8 @@
 module.exports = [
   {
-    slug: "euro-game",
+    slug: "strategy",
     description:
-      "Abstact games that involve little luck. Strategy-focused board games that prioritise limited-randomness",
+      "Strategy-focused board games that prioritise limited-randomness",
   },
   {
     slug: "hidden-roles",
