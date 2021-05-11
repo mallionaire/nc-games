@@ -1,14 +1,12 @@
 process.env.NODE_ENV = 'test';
-const connection = require('../db/connection');
 const request = require('supertest');
 const app = require('../app');
+const seed = require('../db/seed');
+const db = require('../db/connection');
+const data = require('../db/data/test-data');
 
-afterAll(() => {
-  return connection.destroy();
-});
-beforeEach(() => {
-  return connection.seed.run();
-});
+beforeEach(() => seed(data));
+afterAll(() => db.end());
 
 describe('/api', () => {
   it('ERROR-status 404- returns 404 not found when given unknown path', () => {
@@ -19,7 +17,7 @@ describe('/api', () => {
         expect(msg).toBe('Sorry, invalid route');
       });
   });
-  describe('/categories', () => {
+  describe.only('/categories', () => {
     describe('GET', () => {
       it('GET- status 200-  returns array of category objects on a key of categories', () => {
         return request(app)
