@@ -20,7 +20,7 @@ const createTables = async () => {
   CREATE TABLE reviews (
     review_id SERIAL PRIMARY KEY,
     title VARCHAR NOT NULL,
-    category VARCHAR NOT NULL REFERENCES topics(slug),
+    category VARCHAR NOT NULL REFERENCES categories(slug),
     owner VARCHAR NOT NULL REFERENCES users(username),
     review_body TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
@@ -33,7 +33,7 @@ const createTables = async () => {
   CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     body TEXT NOT NULL,
-    review_id INT REFERENCES reviews(review_id) NOT NULL ON DELETE CASCADE,
+    review_id INT REFERENCES reviews(review_id) ON DELETE CASCADE NOT NULL,
     author VARCHAR REFERENCES users(username) NOT NULL,
     votes INT DEFAULT 0 NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
