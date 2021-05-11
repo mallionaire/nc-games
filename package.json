@@ -29,6 +29,7 @@
   "homepage": "https://github.com/northcoders/fe-nc-games#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "pg": "^8.5.1",
     "pg-format": "^1.0.4"
