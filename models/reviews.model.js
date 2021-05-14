@@ -1,72 +1,93 @@
-const { all } = require('../app');
-const connection = require('../db/connection');
+const db = require('../db/connection');
+const { validateSortBy, validateOrder } = require('../utils/utils');
+const { checkExists } = require('./utils.model');
 
-exports.fetchReviewById = (review_id) => {
-  return connection('reviews')
-    .select('reviews.*')
-    .where('reviews.review_id', review_id)
-    .leftJoin('comments', 'reviews.review_id', 'comments.review_id')
-    .count('comment_id AS comment_count')
-    .groupBy('reviews.review_id')
-    .then((review) => {
-      if (!review.length) {
-        return Promise.reject({
-          status: 404,
-          msg: "Sorry, could not find the review you're looking for",
-        });
-      } else return review;
+exports.fetchReviewById = async (review_id) => {
+  const queryStr = `SELECT reviews.*, COUNT(comment_id) AS comment_count
+  FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+  WHERE reviews.review_id = $1
+  GROUP BY reviews.review_id
+  LIMIT 1;`;
+
+  const reviews = await db
+    .query(queryStr, [review_id])
+    .then((result) => result.rows);
+
+  if (!reviews.length) {
+    return Promise.reject({
+      status: 404,
+      msg: "Sorry, could not find the review you're looking for",
     });
+  }
+  return reviews;
 };
 
-exports.updateVotes = (review_id, votes) => {
-  return connection('reviews')
-    .where('review_id', review_id)
-    .increment('votes', votes || 0)
-    .returning('*')
-    .then((review) => {
-      if (!review.length) {
-        return Promise.reject({ status: 404, msg: 'Sorry, not found' });
-      } else {
-        return review;
-      }
+exports.updateVotes = async (review_id, votes = 0) => {
+  const reviews = await db
+    .query(
+      `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;`,
+      [votes, review_id]
+    )
+    .then((result) => result.rows);
+
+  if (!reviews.length) {
+    return Promise.reject({
+      status: 404,
+      msg: `Sorry, not found`,
     });
+  }
+
+  return reviews;
 };
 
-exports.fetchAllReviews = async (
-  column,
-  order,
-  owner,
+exports.fetchAllReviews = async ({
+  sort_by = 'created_at',
+  order = 'desc',
   category,
-  limit,
-  offset
-) => {
-  const allReviews = await connection('reviews')
-    .select('reviews.*')
-    .leftJoin('comments', 'reviews.review_id', 'comments.review_id')
-    .count('comment_id AS comment_count')
-    .groupBy('reviews.review_id')
-    .orderBy(column || 'created_at', order || 'desc')
-    .modify((query) => {
-      if (owner) query.where('reviews.owner', owner);
-      if (category) query.where('reviews.category', category);
-    });
+  owner,
+}) => {
+  const validSortBy = await validateSortBy(sort_by, [
+    'created_at',
+    'votes',
+    'title',
+    'comment_count',
+    'owner',
+    'designer',
+  ]);
+  const validOrder = await validateOrder(order);
+  const dbQueryParams = [];
 
-  const paginatedReviews = await connection('reviews')
-    .select('reviews.*')
-    .leftJoin('comments', 'reviews.review_id', 'comments.review_id')
-    .count('comment_id AS comment_count')
-    .groupBy('reviews.review_id')
-    .orderBy(column || 'created_at', order || 'desc')
-    .modify((query) => {
-      if (owner) query.where('reviews.owner', owner);
-      if (category) query.where('reviews.category', category);
-    })
-    .limit(limit)
-    .offset(offset);
+  let queryStr = `SELECT reviews.*,
+  COUNT(comments.comment_id) AS comment_count
+  FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+`;
 
-  return [allReviews.length, paginatedReviews];
-};
+  if (category) {
+    dbQueryParams.push(category);
+    queryStr += `WHERE reviews.category ILIKE $${dbQueryParams.length}`;
+  }
 
-exports.addReview = (review) => {
-  return connection('reviews').insert(review).returning('*');
+  if (owner) {
+    dbQueryParams.push(owner);
+    queryStr += `${category ? 'AND ' : ''}WHERE reviews.owner ILIKE $${
+      dbQueryParams.length
+    }`;
+  }
+
+  queryStr += `
+  GROUP BY reviews.review_id
+  ORDER BY ${validSortBy} ${validOrder};
+  `;
+
+  const reviews = await db
+    .query(queryStr, dbQueryParams)
+    .then((result) => result.rows);
+
+  if (!reviews.length) {
+    if (category) await checkExists('categories', 'slug', category);
+    if (owner) await checkExists('users', 'username', owner);
+  }
+  return reviews;
 };
