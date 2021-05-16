@@ -184,7 +184,7 @@ describe('/api', () => {
           });
       });
     });
-    xdescribe('POST /reviews/:review_id/comments', () => {
+    describe('POST /reviews/:review_id/comments', () => {
       it('POST - status 201 - responds with the newly posted comment', () => {
         return request(app)
           .post('/api/reviews/2/comments')
@@ -198,8 +198,8 @@ describe('/api', () => {
             expect(commentKeys).toEqual([
               'comment_id',
               'body',
-              'author',
               'review_id',
+              'author',
               'votes',
               'created_at',
             ]);
@@ -243,7 +243,7 @@ describe('/api', () => {
           });
       });
     });
-    xdescribe('GET /reviews/:review_id/comments', () => {
+    describe('GET /reviews/:review_id/comments', () => {
       it('GET - status 200 - returns an array of comments for the given review', () => {
         return request(app)
           .get('/api/reviews/3/comments')
@@ -302,15 +302,15 @@ describe('/api', () => {
           .get('/api/reviews/3/comments?sort_by=invalid')
           .expect(400)
           .then(({ body: { msg } }) => {
-            expect(msg).toBe('Bad request');
+            expect(msg).toBe('Invalid sort by query');
           });
       });
-      it('GET - status 200 - returns comments in default order if order is not asc or desc', () => {
+      it('GET - status 400 - returns bad request if order is not asc or desc', () => {
         return request(app)
           .get('/api/reviews/3/comments?order=invalid')
-          .expect(200)
-          .then(({ body: { comments } }) => {
-            expect(comments).toBeSorted({ descending: true });
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('Invalid order query');
           });
       });
     });
@@ -413,7 +413,7 @@ describe('/api', () => {
         });
       });
     });
-    xdescribe('/comments/:comment_id', () => {
+    describe('/comments/:comment_id', () => {
       describe('PATCH', () => {
         it('PATCH - status 200 - responds with an updated vote count on a comment', () => {
           return request(app)
@@ -448,7 +448,7 @@ describe('/api', () => {
             .send({ inc_votes: 1 })
             .expect(404)
             .then(({ body: { msg } }) => {
-              expect(msg).toBe('Sorry, not found');
+              expect(msg).toBe('comment not found');
             });
         });
         it('ERROR - status 404 - responds with not found for a non-existent comment type', () => {
@@ -480,7 +480,7 @@ describe('/api', () => {
                 .delete('/api/comments/2')
                 .expect(404)
                 .then(({ body: { msg } }) => {
-                  expect(msg).toBe('Could not delete comment');
+                  expect(msg).toBe('comment not found');
                 });
             });
         });
@@ -489,7 +489,7 @@ describe('/api', () => {
             .delete('/api/comments/2000')
             .expect(404)
             .then(({ body: { msg } }) => {
-              expect(msg).toBe('Could not delete comment');
+              expect(msg).toBe('comment not found');
             });
         });
         it('ERROR - status 400 - returns bad request if given wrong comment type', () => {

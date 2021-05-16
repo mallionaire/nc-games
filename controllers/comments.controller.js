@@ -46,12 +46,8 @@ exports.deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
 
   removeComment(comment_id)
-    .then((result) => {
-      if (result > 0) {
-        res.status(204).send();
-      } else {
-        return Promise.reject({ status: 404, msg: 'Could not delete comment' });
-      }
+    .then(() => {
+      res.status(204).send();
     })
     .catch(next);
 };
