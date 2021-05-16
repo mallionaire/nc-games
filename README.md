@@ -1,23 +1,17 @@
-# NC House of Games API
+# NC Games Example API
 
 In order to use this API for your front end project you will need to fork this repo and host following the instructions below.
 
 ## Hosting a PSQL DB using Heroku
 
-There are many ways to host applications like the one you have created. One of these solutions is Heroku. Heroku provides a service that you can push your code to and it will build, run and host it. Heroku also allows for easy database integration. Their [documentation](https://devcenter.heroku.com/articles/getting-started-with-nodejs) is excellent, so take a look at that. This document is essentially a more condensed, specific version of the steps described in the Heroku docs.
+This repo is setup to be hosted on heroku. Follow the steps below to get your own copy of the api up and running.
 
 ## 1. Install the Heroku CLI
 
-On macOS:
+Install the heroku cli if you haven't already.
 
 ```bash
-brew tap heroku/brew && brew install heroku
-```
-
-...or Ubuntu:
-
-```bash
-sudo snap install --classic heroku
+npm i heroku -g
 ```
 
 ## 2. Create a Heroku App
@@ -28,7 +22,7 @@ Log into Heroku using their command line interface:
 heroku login
 ```
 
-Create an app in an active git directory. Doing this in the folder where your server exists is a good start, as this is what you will be hosting.
+Clone your fork of this repo and `cd` into the new directory. From there create an app on heroku using the cli.
 
 ```bash
 heroku create your-app-name
@@ -46,7 +40,7 @@ git remote -v
 ## 3. Push Your code up to Heroku
 
 ```bash
-git push heroku master
+git push heroku main
 ```
 
 ## 4. Creating a Hosted Database
@@ -74,13 +68,7 @@ If you are in your app's directory, and the database is correctly linked as an a
 Make sure to **run the seed prod script** from your `package.json`:
 
 ```bash
-npm run seed:prod
-```
-
-Commit your changes, and push to heroku master.
-
-```bash
-git push heroku master
+npm run seed-prod
 ```
 
 ## 6. Review Your App
