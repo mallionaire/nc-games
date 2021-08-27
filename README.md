@@ -68,7 +68,7 @@ If you are in your app's directory, and the database is correctly linked as an a
 Make sure to **run the seed prod script** from your `package.json`:
 
 ```bash
-npm run seed-prod
+npm run seed:prod
 ```
 
 ## 6. Review Your App
