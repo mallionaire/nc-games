@@ -87,6 +87,34 @@ describe('/api', () => {
       });
     });
   });
+  describe('/users', () => {
+    it('GET- status 200 - responds with an array of user objects on a key of users', () => {
+      return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(Array.isArray(users)).toBe(true);
+          expect(Object.keys(users[0])).toEqual([
+            'username',
+            'name',
+            'avatar_url',
+          ]);
+        });
+    });
+    it('ERROR - status 405 - returns invalid method msg', () => {
+      const invalidMethods = ['put', 'delete'];
+
+      const requests = invalidMethods.map((method) => {
+        return request(app)
+          [method]('/api/users')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('Sorry, method not allowed');
+          });
+      });
+      return Promise.all(requests);
+    });
+  });
   describe('/users/:username', () => {
     it('GET - status 200 - responds with a user object', () => {
       return request(app)
@@ -97,7 +125,7 @@ describe('/api', () => {
             username: 'mallionaire',
             name: 'haz',
             avatar_url:
-              'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
+              'https://images.unsplash.com/photo-1578855691621-8a08ea00d1fb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8',
           });
         });
     });
